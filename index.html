@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>凡人自律修仙傳 · 修練日記</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c8902a;
+  --gold-light: #f0c060;
+  --jade: #2a6b4a;
+  --jade-light: #4a9b6a;
+  --crimson: #8b1a1a;
+  --br: 6px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0e0a04; font-family:'Noto Sans TC',sans-serif; min-height:100vh; overflow-x:hidden; }
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(200,144,42,0.04) 60px),
+    repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(200,144,42,0.04) 60px);
+  pointer-events:none; z-index:0;
+}
+.app-wrapper { position:relative; z-index:1; max-width:1100px; margin:0 auto; padding:0 1rem 4rem; }
+
+/* HEADER */
+.site-header { text-align:center; padding:2.5rem 1rem 1.5rem; border-bottom:1px solid rgba(200,144,42,0.3); margin-bottom:2rem; }
+.site-header h1 { font-family:‘Noto Serif TC’,serif; font-weight:900; font-size:clamp(1.6rem,5vw,2.8rem); color:var(–gold-light); letter-spacing:0.15em; text-shadow:0 0 30px rgba(200,144,42,0.4); }
+.site-header .subtitle { font-size:0.8rem; color:var(–gold); letter-spacing:0.3em; margin-top:0.5rem; opacity:0.7; }
+
+/* TABS */
+.tab-nav { display:flex; gap:4px; background:rgba(200,144,42,0.08); border:1px solid rgba(200,144,42,0.2); border-radius:var(–br); padding:4px; margin-bottom:1.5rem; flex-wrap:wrap; }
+.tab-btn { flex:1; min-width:65px; padding:0.55rem 0.3rem; border:none; background:transparent; color:var(–gold); font-family:‘Noto Serif TC’,serif; font-size:0.78rem; letter-spacing:0.05em; cursor:pointer; border-radius:4px; transition:background 0.2s; white-space:nowrap; }
+.tab-btn.active { background:rgba(200,144,42,0.2); color:var(–gold-light); font-weight:700; }
+.tab-btn:hover:not(.active) { background:rgba(200,144,42,0.1); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* STAT CARDS */
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:1.5rem; }
+.stat-card { background:rgba(200,144,42,0.08); border:1px solid rgba(200,144,42,0.2); border-radius:var(–br); padding:1rem; text-align:center; }
+.stat-card .label { font-size:0.67rem; color:var(–gold); letter-spacing:0.15em; margin-bottom:0.4rem; opacity:0.8; }
+.stat-card .value { font-family:‘Noto Serif TC’,serif; font-size:1.6rem; font-weight:700; color:var(–gold-light); }
+.stat-card .unit { font-size:0.62rem; color:var(–gold); opacity:0.6; margin-top:2px; }
+
+/* REALM */
+.realm-banner { background:linear-gradient(135deg,rgba(42,107,74,0.15) 0%,rgba(200,144,42,0.12) 100%); border:1px solid rgba(200,144,42,0.35); border-radius:var(–br); padding:1.2rem 1.5rem; margin-bottom:1rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+.realm-icon { font-size:2rem; line-height:1; }
+.realm-info { flex:1; min-width:130px; }
+.realm-name { font-family:‘Noto Serif TC’,serif; font-size:1.2rem; font-weight:700; color:var(–gold-light); letter-spacing:0.1em; }
+.realm-level { font-size:0.75rem; color:var(–jade-light); margin-top:2px; }
+.progress-bar-wrap { flex:2; min-width:170px; }
+.progress-label { display:flex; justify-content:space-between; font-size:0.7rem; color:var(–gold); opacity:0.7; margin-bottom:6px; }
+.progress-track { height:8px; background:rgba(200,144,42,0.12); border-radius:4px; overflow:hidden; border:1px solid rgba(200,144,42,0.2); }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(–jade-light),var(–gold)); border-radius:4px; transition:width 0.6s ease; }
+
+/* DECAY ALERT */
+.decay-alert {
+background: rgba(139,26,26,0.12);
+border: 1px solid rgba(200,80,80,0.35);
+border-radius: var(–br);
+padding: 0.9rem 1.1rem;
+margin-bottom: 1.5rem;
+display: none;
+}
+.decay-alert.show { display: block; }
+.decay-title { font-family:‘Noto Serif TC’,serif; font-size:0.82rem; color:#ffaaaa; letter-spacing:0.1em; margin-bottom:0.5rem; }
+.decay-row { display:flex; align-items:center; gap:8px; font-size:0.76rem; color:rgba(255,160,160,0.75); padding:3px 0; }
+.decay-dot { width:6px; height:6px; border-radius:50%; background:#c05050; flex-shrink:0; }
+
+/* SECTIONS */
+.section-wrap { background:rgba(200,144,42,0.05); border:1px solid rgba(200,144,42,0.15); border-radius:var(–br); padding:1rem 1.2rem; margin-bottom:1.5rem; }
+.section-title { font-family:‘Noto Serif TC’,serif; font-size:0.85rem; color:var(–gold); letter-spacing:0.2em; margin-bottom:0.8rem; display:flex; align-items:center; gap:8px; }
+.section-title::after { content:’’; flex:1; height:1px; background:rgba(200,144,42,0.2); }
+
+/* SKILL CARD */
+.skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; }
+.skill-card { background:rgba(0,0,0,0.2); border:1px solid rgba(200,144,42,0.15); border-radius:4px; padding:0.75rem 0.9rem; position:relative; overflow:hidden; }
+.skill-card.decaying { border-color:rgba(200,80,80,0.3); }
+.skill-card .decay-badge { position:absolute; top:6px; right:7px; font-size:0.6rem; color:#ff9999; background:rgba(139,26,26,0.3); border:1px solid rgba(200,80,80,0.3); border-radius:3px; padding:1px 5px; }
+.skill-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:2px; }
+.skill-name { font-size:0.8rem; color:var(–gold-light); }
+.skill-realm { font-size:0.65rem; color:var(–jade-light); }
+.skill-min { font-size:0.65rem; color:rgba(200,144,42,0.5); margin-top:2px; }
+.skill-bar-track { height:4px; background:rgba(200,144,42,0.1); border-radius:2px; margin-top:7px; overflow:hidden; }
+.skill-bar-fill { height:100%; background:var(–jade-light); border-radius:2px; }
+.skill-card.decaying .skill-bar-fill { background:#c05050; }
+
+/* ═══════════════════════════════
+TIMER
+═══════════════════════════════ */
+.timer-outer { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:1.5rem; }
+@media(max-width:640px){ .timer-outer { grid-template-columns:1fr; } }
+
+.timer-section { background:rgba(42,107,74,0.08); border:1px solid rgba(74,155,106,0.3); border-radius:var(–br); padding:1.4rem 1.2rem; }
+
+/* Skill select pills */
+.timer-skill-select { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:1rem; }
+.timer-skill-btn {
+background:rgba(0,0,0,0.25); border:1px solid rgba(200,144,42,0.2);
+color:rgba(240,192,96,0.65); padding:0.38rem 0.85rem; border-radius:20px;
+font-size:0.77rem; cursor:pointer; transition:all 0.18s; white-space:nowrap;
+}
+.timer-skill-btn.selected { background:rgba(74,155,106,0.22); border-color:var(–jade-light); color:#a0ffcc; }
+
+/* Clock */
+.timer-display { text-align:center; margin:0.8rem 0 1rem; }
+.timer-clock { font-family:‘Noto Serif TC’,serif; font-size:3rem; font-weight:700; color:var(–gold-light); letter-spacing:0.06em; line-height:1; }
+.timer-clock.running { color:#7effb8; animation: pulse-glow 2s ease-in-out infinite; }
+@keyframes pulse-glow { 0%,100%{text-shadow:0 0 10px rgba(126,255,184,0.3)} 50%{text-shadow:0 0 25px rgba(126,255,184,0.7)} }
+.timer-skill-label { font-size:0.73rem; color:rgba(200,144,42,0.55); letter-spacing:0.15em; margin-top:6px; }
+
+.timer-actions { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.btn-timer { border:1px solid; padding:0.5rem 1.3rem; border-radius:4px; font-family:‘Noto Serif TC’,serif; font-size:0.85rem; letter-spacing:0.1em; cursor:pointer; transition:background 0.2s,transform 0.1s; }
+.btn-timer:active { transform:scale(0.97); }
+.btn-start { background:rgba(42,107,74,0.3); border-color:var(–jade-light); color:#a0ffcc; }
+.btn-start:hover { background:rgba(42,107,74,0.5); }
+.btn-stop { background:rgba(139,26,26,0.25); border-color:#c05050; color:#ffaaaa; }
+.btn-stop:hover { background:rgba(139,26,26,0.45); }
+.btn-save-timer { background:rgba(200,144,42,0.2); border-color:var(–gold); color:var(–gold-light); }
+.btn-save-timer:hover { background:rgba(200,144,42,0.4); }
+.timer-result { margin-top:0.8rem; text-align:center; font-size:0.78rem; color:rgba(200,144,42,0.7); min-height:1.3em; line-height:1.5; }
+
+/* ANIMATION PANEL */
+.anim-panel {
+border:1px solid rgba(200,144,42,0.18);
+border-radius:var(–br);
+background:rgba(0,0,0,0.25);
+display:flex; flex-direction:column; align-items:center; justify-content:center;
+min-height:280px; padding:1.5rem;
+}
+.anim-placeholder { text-align:center; color:rgba(200,144,42,0.3); font-size:0.82rem; letter-spacing:0.1em; }
+
+/* SVG animations */
+.skill-anim-wrap { width:160px; height:160px; position:relative; }
+.anim-title { font-family:‘Noto Serif TC’,serif; font-size:0.9rem; color:var(–gold); letter-spacing:0.15em; margin-top:1rem; text-align:center; }
+.anim-timer-label { font-size:0.7rem; color:rgba(200,144,42,0.5); letter-spacing:0.1em; margin-top:4px; text-align:center; }
+
+/* MANAGE */
+.manage-row { display:flex; align-items:center; gap:10px; padding:0.65rem 0; border-bottom:1px solid rgba(200,144,42,0.08); flex-wrap:wrap; }
+.manage-row .mk-emoji { font-size:1.15rem; width:26px; text-align:center; }
+.manage-row .mk-name { flex:1; font-size:0.85rem; color:var(–gold-light); min-width:90px; }
+.manage-row .mk-key { font-size:0.7rem; color:rgba(200,144,42,0.45); font-family:monospace; min-width:70px; }
+.manage-row .mk-anim { font-size:0.68rem; color:rgba(200,144,42,0.4); min-width:80px; }
+
+.add-skill-form { display:grid; grid-template-columns:60px 1fr 120px 110px auto; gap:8px; align-items:end; margin-top:1rem; }
+@media(max-width:640px){ .add-skill-form { grid-template-columns:60px 1fr; } }
+
+/* BUTTONS */
+.btn-primary { background:rgba(200,144,42,0.2); border:1px solid var(–gold); color:var(–gold-light); padding:0.45rem 1.1rem; border-radius:4px; font-family:‘Noto Serif TC’,serif; font-size:0.8rem; letter-spacing:0.1em; cursor:pointer; transition:background 0.2s; white-space:nowrap; }
+.btn-primary:hover { background:rgba(200,144,42,0.35); }
+.btn-primary:disabled { opacity:0.35; cursor:default; }
+.btn-sm { padding:0.28rem 0.6rem; font-size:0.72rem; }
+.btn-danger { background:rgba(139,26,26,0.2); border:1px solid rgba(192,80,80,0.4); color:#ffaaaa; padding:0.3rem 0.7rem; border-radius:4px; font-size:0.72rem; cursor:pointer; transition:background 0.18s; white-space:nowrap; }
+.btn-danger:hover { background:rgba(139,26,26,0.4); }
+
+/* FORM */
+.form-card { background:rgba(200,144,42,0.05); border:1px solid rgba(200,144,42,0.2); border-radius:var(–br); padding:1.5rem; margin-bottom:1.5rem; }
+.form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:14px; margin-bottom:1rem; }
+.form-group label { display:block; font-size:0.7rem; color:var(–gold); letter-spacing:0.12em; margin-bottom:5px; opacity:0.8; }
+.form-group input, .form-group select { width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(200,144,42,0.25); color:var(–gold-light); padding:0.5rem 0.7rem; border-radius:4px; font-family:‘Noto Sans TC’,sans-serif; font-size:0.82rem; outline:none; transition:border-color 0.2s; }
+.form-group input:focus { border-color:var(–gold); }
+.form-group input::placeholder { color:rgba(200,144,42,0.3); }
+.form-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.save-status { font-size:0.75rem; color:var(–jade-light); opacity:0; transition:opacity 0.3s; }
+.save-status.show { opacity:1; }
+
+/* Generic inputs outside form-group */
+input[type=“text”],input[type=“number”],input[type=“date”] { background:rgba(0,0,0,0.3); border:1px solid rgba(200,144,42,0.25); color:var(–gold-light); padding:0.4rem 0.6rem; border-radius:4px; font-family:‘Noto Sans TC’,sans-serif; font-size:0.82rem; outline:none; }
+input::placeholder { color:rgba(200,144,42,0.3); }
+select { background:rgba(0,0,0,0.3); border:1px solid rgba(200,144,42,0.25); color:var(–gold-light); padding:0.4rem 0.6rem; border-radius:4px; font-size:0.82rem; outline:none; }
+option { background:#1a1208; }
+
+/* TABLE */
+.log-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:1rem; }
+.log-controls input, .log-controls select { background:rgba(200,144,42,0.07); border:1px solid rgba(200,144,42,0.25); color:var(–gold-light); padding:0.4rem 0.7rem; border-radius:4px; font-size:0.8rem; }
+.table-wrap { overflow-x:auto; border:1px solid rgba(200,144,42,0.2); border-radius:var(–br); }
+table { width:100%; border-collapse:collapse; font-size:0.77rem; min-width:500px; }
+thead th { background:rgba(200,144,42,0.12); color:var(–gold); font-family:‘Noto Serif TC’,serif; font-weight:700; padding:0.6rem 0.7rem; text-align:left; border-bottom:1px solid rgba(200,144,42,0.25); white-space:nowrap; }
+tbody tr { border-bottom:1px solid rgba(200,144,42,0.08); transition:background 0.15s; }
+tbody tr:hover { background:rgba(200,144,42,0.06); }
+tbody td { padding:0.5rem 0.7rem; color:rgba(240,192,96,0.85); vertical-align:middle; }
+tbody td.date-cell { font-family:‘Noto Serif TC’,serif; color:var(–gold-light); white-space:nowrap; }
+.badge { display:inline-block; background:rgba(200,144,42,0.15); border:1px solid rgba(200,144,42,0.3); border-radius:3px; padding:1px 6px; color:var(–gold-light); font-size:0.72rem; white-space:nowrap; }
+.badge-red { background:rgba(180,60,60,0.1); border-color:rgba(180,60,60,0.4); color:#ffaaaa; }
+.demon-low { color:#5bc0a0; }
+
+/* CHART */
+.chart-container { background:rgba(200,144,42,0.04); border:1px solid rgba(200,144,42,0.15); border-radius:var(–br); padding:1rem; margin-bottom:1rem; height:220px; }
+canvas { width:100%!important; }
+.chart-legend { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:8px; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:0.68rem; color:var(–gold); opacity:0.75; }
+.legend-dot { width:8px; height:8px; border-radius:50%; }
+
+.empty-state { text-align:center; padding:2rem 1rem; color:rgba(200,144,42,0.4); font-family:‘Noto Serif TC’,serif; font-size:0.9rem; letter-spacing:0.1em; }
+
+/* TOAST */
+.toast { position:fixed; bottom:2rem; right:1.5rem; background:rgba(42,107,74,0.92); border:1px solid var(–jade-light); color:#b0ffcc; padding:0.7rem 1.2rem; border-radius:var(–br); font-size:0.8rem; z-index:1000; opacity:0; transform:translateY(10px); transition:opacity 0.3s,transform 0.3s; pointer-events:none; max-width:280px; }
+.toast.show { opacity:1; transform:translateY(0); }
+
+/* ═══ SVG ANIMATION STYLES ═══ */
+@keyframes float-orb { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes spin-slow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes spin-ccw { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
+@keyframes breathe { 0%,100%{transform:scale(1);opacity:0.7} 50%{transform:scale(1.08);opacity:1} }
+@keyframes run-legs { 0%,100%{d:path(“M70,110 L60,140 L55,160”)} 50%{d:path(“M70,110 L65,140 L75,158”)} }
+@keyframes arm-swing { 0%,100%{transform:rotate(-20deg)} 50%{transform:rotate(20deg)} }
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+@keyframes glow-ring { 0%,100%{stroke-opacity:0.3;stroke-width:2} 50%{stroke-opacity:0.8;stroke-width:4} }
+@keyframes particle-rise { 0%{transform:translateY(0);opacity:0.8} 100%{transform:translateY(-30px);opacity:0} }
+@keyframes sword-slash { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
+@keyframes pen-write { 0%,100%{transform:translateX(0)} 50%{transform:translateX(4px)} }
+@keyframes wave { 0%{transform:scaleX(1)} 50%{transform:scaleX(1.05)} 100%{transform:scaleX(1)} }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <header class="site-header">
+    <h1>凡人自律修仙傳</h1>
+    <div class="subtitle">修練日記 · 個人版</div>
+  </header>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('panel')">個人面板</button>
+    <button class="tab-btn" onclick="switchTab('timer')">⏱ 計時修練</button>
+    <button class="tab-btn" onclick="switchTab('add')">新增記錄</button>
+    <button class="tab-btn" onclick="switchTab('log')">修練日誌</button>
+    <button class="tab-btn" onclick="switchTab('chart')">修為圖譜</button>
+    <button class="tab-btn" onclick="switchTab('manage')">功法管理</button>
+  </nav>
+
+  <!-- ══ 個人面板 ══ -->
+
+  <div id="tab-panel" class="tab-panel active">
+    <div class="stat-grid" id="stat-grid"></div>
+    <div id="realm-banner" class="realm-banner"></div>
+    <div class="decay-alert" id="decay-alert">
+      <div class="decay-title">⚠ 心魔侵蝕警示 — 未修練功法正在退步</div>
+      <div id="decay-list"></div>
+    </div>
+    <div class="section-wrap">
+      <div class="section-title">本命功法進度</div>
+      <div class="skills-grid" id="skills-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══ 計時修練 ══ -->
+
+  <div id="tab-timer" class="tab-panel">
+    <div class="timer-outer">
+      <!-- Left: controls -->
+      <div class="timer-section">
+        <div class="section-title" style="margin-bottom:0.9rem">選擇功法</div>
+        <div class="timer-skill-select" id="timer-skill-select"></div>
+        <div class="timer-display">
+          <div class="timer-clock" id="timer-clock">00:00:00</div>
+          <div class="timer-skill-label" id="timer-skill-label">請先選擇功法</div>
+        </div>
+        <div class="timer-actions">
+          <button class="btn-timer btn-start" id="btn-start" onclick="timerStart()">▶ 開始修練</button>
+          <button class="btn-timer btn-stop"  id="btn-stop"  onclick="timerStop()"  style="display:none">■ 停止</button>
+          <button class="btn-timer btn-save-timer" id="btn-save-timer" onclick="timerSave()" style="display:none">⚡ 記錄入冊</button>
+        </div>
+        <div class="timer-result" id="timer-result"></div>
+      </div>
+      <!-- Right: animation -->
+      <div class="anim-panel" id="anim-panel">
+        <div class="anim-placeholder">選擇功法後<br>顯示修練動畫</div>
+      </div>
+    </div>
+    <div class="section-wrap">
+      <div class="section-title">今日已修練</div>
+      <div id="timer-today-log"></div>
+    </div>
+  </div>
+
+  <!-- ══ 新增記錄 ══ -->
+
+  <div id="tab-add" class="tab-panel">
+    <div class="form-card">
+      <div class="section-title" style="margin-bottom:1.2rem">修練記錄（可手動填寫或修改）</div>
+      <div class="form-grid" id="add-form-grid"></div>
+      <div class="form-group" style="margin-bottom:1rem">
+        <label>備註 / 購買物品</label>
+        <input type="text" id="f-note" placeholder="今日所感或靈石用途...">
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="addEntry()">⚡ 記錄修練</button>
+        <button class="btn-primary" onclick="loadTodayIntoForm()" style="background:rgba(42,107,74,0.2);border-color:var(--jade-light);color:#a0ffcc">↻ 載入今日</button>
+        <span class="save-status" id="save-status">✓ 已記錄入冊</span>
+      </div>
+    </div>
+    <div class="section-wrap">
+      <div class="section-title">最近三日修練</div>
+      <div id="recent-entries"></div>
+    </div>
+  </div>
+
+  <!-- ══ 日誌 ══ -->
+
+  <div id="tab-log" class="tab-panel">
+    <div class="log-controls">
+      <input type="text" id="search-date" placeholder="搜尋日期..." style="width:140px" oninput="renderLog()">
+      <select id="filter-sort" onchange="renderLog()">
+        <option value="desc">最新在前</option>
+        <option value="asc">最早在前</option>
+      </select>
+      <button class="btn-primary" onclick="renderLog()">刷新</button>
+      <span style="font-size:0.72rem;color:var(--gold);opacity:0.6;margin-left:auto" id="log-count"></span>
+    </div>
+    <div class="table-wrap">
+      <table><thead id="log-thead"></thead><tbody id="log-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ 圖譜 ══ -->
+
+  <div id="tab-chart" class="tab-panel">
+    <div class="section-wrap"><div class="section-title">最近修練趨勢（靈石 + 總修為）</div></div>
+    <div class="chart-container"><canvas id="chart-main"></canvas></div>
+    <div class="chart-legend" id="chart-legend"></div>
+    <div class="section-wrap" style="margin-top:1rem"><div class="section-title">各功法累計修為</div></div>
+    <div class="chart-container"><canvas id="chart-skills"></canvas></div>
+  </div>
+
+  <!-- ══ 功法管理 ══ -->
+
+  <div id="tab-manage" class="tab-panel">
+    <div class="section-wrap">
+      <div class="section-title">現有功法</div>
+      <div id="manage-skill-list"></div>
+      <div style="margin-top:1.4rem">
+        <div class="section-title" style="margin-bottom:0.8rem">新增功法</div>
+        <div class="add-skill-form">
+          <div>
+            <label style="font-size:0.68rem;color:var(--gold);opacity:0.8;display:block;margin-bottom:4px">Emoji</label>
+            <input type="text" id="new-emoji" placeholder="🔥" style="width:100%">
+          </div>
+          <div>
+            <label style="font-size:0.68rem;color:var(--gold);opacity:0.8;display:block;margin-bottom:4px">功法名稱</label>
+            <input type="text" id="new-name" placeholder="如：玄天劍訣">
+          </div>
+          <div>
+            <label style="font-size:0.68rem;color:var(--gold);opacity:0.8;display:block;margin-bottom:4px">欄位代號（英文）</label>
+            <input type="text" id="new-key" placeholder="如：sword">
+          </div>
+          <div>
+            <label style="font-size:0.68rem;color:var(--gold);opacity:0.8;display:block;margin-bottom:4px">動畫類型</label>
+            <select id="new-anim">
+              <option value="meditation">打坐冥想</option>
+              <option value="exercise">體魄鍛鍊</option>
+              <option value="study">研讀學習</option>
+              <option value="sword">劍術修煉</option>
+              <option value="work">勞作工作</option>
+              <option value="default">通用</option>
+            </select>
+          </div>
+          <div style="padding-top:18px">
+            <button class="btn-primary" onclick="addSkill()">＋ 新增</button>
+          </div>
+        </div>
+        <div style="font-size:0.7rem;color:rgba(200,144,42,0.4);margin-top:6px">※ 欄位代號僅限英文小寫與數字</div>
+      </div>
+    </div>
+    <div class="section-wrap">
+      <div class="section-title">系統固定欄位（不可刪除）</div>
+      <div style="font-size:0.78rem;color:rgba(200,144,42,0.55);line-height:2.2">
+        ⚒ 工作（work）&emsp;◈ 靈石收入（lingshi）&emsp;◈ 靈石消費（spend）&emsp;☯ 心魔係數（demon）&emsp;📝 備註（note）
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<script>
+// ══════════════════════════════════════════════
+//  SEED DATA
+// ══════════════════════════════════════════════
+const SEED_DATA = [{"date":"2025-12-27","work":14,"japanese":1,"english":50,"ai":240,"body":43,"meditation":1,"lingshi":170,"spend":0,"note":"","demon":1},{"date":"2025-12-28","work":0,"japanese":5,"english":42,"ai":60,"body":22,"meditation":15,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2025-12-29","work":12,"japanese":0,"english":68,"ai":30,"body":36,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2025-12-30","work":0,"japanese":0,"english":66,"ai":0,"body":0,"meditation":0,"lingshi":0,"spend":0,"note":"","demon":1},{"date":"2025-12-31","work":6,"japanese":22,"english":0,"ai":0,"body":0,"meditation":60,"lingshi":60,"spend":0,"note":"","demon":0.5},{"date":"2026-01-02","work":12,"japanese":30,"english":60,"ai":100,"body":45,"meditation":15,"lingshi":140,"spend":0,"note":"","demon":0.5},{"date":"2026-01-03","work":0,"japanese":0,"english":0,"ai":20,"body":0,"meditation":0,"lingshi":0,"spend":0,"note":"","demon":1},{"date":"2026-01-04","work":12,"japanese":0,"english":0,"ai":50,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-01-05","work":0,"japanese":0,"english":5,"ai":0,"body":0,"meditation":0,"lingshi":0,"spend":0,"note":"","demon":1},{"date":"2026-01-06","work":12,"japanese":17,"english":0,"ai":30,"body":90,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-01-07","work":0,"japanese":0,"english":0,"ai":0,"body":0,"meditation":30,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2026-01-13","work":0,"japanese":0,"english":0,"ai":90,"body":0,"meditation":15,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2026-01-14","work":0,"japanese":0,"english":0,"ai":60,"body":0,"meditation":60,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2026-01-16","work":12,"japanese":0,"english":0,"ai":60,"body":30,"meditation":20,"lingshi":140,"spend":0,"note":"","demon":0.5},{"date":"2026-01-17","work":0,"japanese":0,"english":50,"ai":60,"body":0,"meditation":0,"lingshi":0,"spend":0,"note":"","demon":1},{"date":"2026-01-18","work":12,"japanese":40,"english":40,"ai":120,"body":90,"meditation":20,"lingshi":140,"spend":0,"note":"","demon":0.5},{"date":"2026-01-19","work":0,"japanese":0,"english":0,"ai":30,"body":120,"meditation":0,"lingshi":0,"spend":0,"note":"","demon":1},{"date":"2026-01-20","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":20,"lingshi":140,"spend":0,"note":"","demon":0.5},{"date":"2026-01-21","work":0,"japanese":0,"english":0,"ai":0,"body":0,"meditation":30,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2026-01-22","work":12,"japanese":0,"english":10,"ai":30,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-01-24","work":12,"japanese":0,"english":0,"ai":0,"body":60,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-01-26","work":12,"japanese":0,"english":20,"ai":0,"body":60,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-01-27","work":0,"japanese":0,"english":60,"ai":0,"body":120,"meditation":15,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2026-01-28","work":0,"japanese":0,"english":0,"ai":0,"body":120,"meditation":0,"lingshi":0,"spend":0,"note":"","demon":1},{"date":"2026-01-30","work":12,"japanese":0,"english":0,"ai":60,"body":120,"meditation":10,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-02-01","work":12,"japanese":0,"english":0,"ai":0,"body":120,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-02-05","work":6,"japanese":0,"english":0,"ai":0,"body":60,"meditation":0,"lingshi":60,"spend":0,"note":"","demon":1},{"date":"2026-02-07","work":12,"japanese":0,"english":0,"ai":0,"body":60,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-02-09","work":6,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":60,"spend":0,"note":"","demon":1},{"date":"2026-02-11","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-02-12","work":6,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":60,"spend":0,"note":"","demon":1},{"date":"2026-02-19","work":6,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":60,"spend":0,"note":"","demon":1},{"date":"2026-02-20","work":6,"japanese":0,"english":0,"ai":0,"body":90,"meditation":0,"lingshi":60,"spend":0,"note":"","demon":1},{"date":"2026-02-21","work":6,"japanese":0,"english":0,"ai":0,"body":60,"meditation":0,"lingshi":60,"spend":0,"note":"","demon":1},{"date":"2026-02-22","work":12,"japanese":0,"english":0,"ai":0,"body":60,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-02-23","work":6,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":60,"spend":0,"note":"","demon":1},{"date":"2026-02-25","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-02-27","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-03-03","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-03-04","work":0,"japanese":0,"english":0,"ai":0,"body":0,"meditation":60,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2026-03-05","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-03-07","work":12,"japanese":0,"english":0,"ai":0,"body":30,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-03-09","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1},{"date":"2026-03-11","work":0,"japanese":0,"english":0,"ai":0,"body":60,"meditation":60,"lingshi":0,"spend":0,"note":"","demon":0.5},{"date":"2026-03-12","work":0,"japanese":0,"english":60,"ai":0,"body":0,"meditation":0,"lingshi":0,"spend":0,"note":"","demon":1},{"date":"2026-03-13","work":12,"japanese":0,"english":0,"ai":0,"body":0,"meditation":0,"lingshi":140,"spend":0,"note":"","demon":1}];
+
+const DEFAULT_SKILLS = [
+  {emoji:'🇯🇵', name:'東瀛梵音訣', key:'japanese', anim:'study'},
+  {emoji:'🇺🇸', name:'西夷通文錄', key:'english',  anim:'study'},
+  {emoji:'🤖', name:'雙子天衍術',  key:'ai',       anim:'study'},
+  {emoji:'💪', name:'蠻荒霸體訣',  key:'body',     anim:'exercise'},
+  {emoji:'🧘', name:'太虛養神篇',  key:'meditation',anim:'meditation'},
+];
+
+const ENTRY_KEY  = 'cultivation_entries_v1';
+const SKILLS_KEY = 'cultivation_skills_v2';
+
+// ══ STORAGE ══
+function loadEntries(){try{const r=localStorage.getItem(ENTRY_KEY);if(r)return JSON.parse(r);}catch(e){}const d=[...SEED_DATA];saveEntries(d);return d;}
+function saveEntries(a){try{localStorage.setItem(ENTRY_KEY,JSON.stringify(a));}catch(e){}}
+function loadSkills(){try{const r=localStorage.getItem(SKILLS_KEY);if(r)return JSON.parse(r);}catch(e){}saveSkills(DEFAULT_SKILLS);return[...DEFAULT_SKILLS];}
+function saveSkills(a){try{localStorage.setItem(SKILLS_KEY,JSON.stringify(a));}catch(e){}}
+
+let entries=loadEntries();
+let skills=loadSkills();
+
+// ══ GAME LOGIC ══
+const TIERS=['煉氣期','築基期','金丹期','元嬰期','化神期','煉虛期','合體期','大乘期','渡劫期','真仙境'];
+const LAYERS=9;
+const DECAY_PER_MISSED=5; // minutes penalty per missed day
+
+function calcTotalExp(lv){let t=0;for(let i=1;i<lv;i++)t+=Math.round(100*Math.pow(1.5,Math.floor((i-1)/LAYERS)));return t;}
+function getLevelFromExp(exp){let lv=1;while(calcTotalExp(lv+1)<=Math.max(0,exp))lv++;return lv;}
+function getRealmInfo(lv){
+  const ti=Math.min(Math.floor((lv-1)/LAYERS),TIERS.length-1);
+  return{tierName:TIERS[ti],layerInTier:((lv-1)%LAYERS)+1,curExp:calcTotalExp(lv),nextExp:calcTotalExp(lv+1)};
+}
+
+// Compute effective exp per skill considering decay for missed days
+function computeSkillEffectiveExp(key){
+  const sorted=[...entries].sort((a,b)=>a.date.localeCompare(b.date));
+  let exp=0;
+  // Get all dates recorded
+  const dates=sorted.map(e=>e.date);
+  if(!dates.length) return 0;
+  const first=new Date(dates[0]);
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  // Walk each day from first entry to today
+  let cursor=new Date(first);
+  while(cursor<=today){
+    const ds=cursor.toISOString().split('T')[0];
+    const rec=entries.find(e=>e.date===ds);
+    if(rec){
+      exp+=((rec[key]||0)*(rec.demon||1));
+    } else {
+      // missed day — decay
+      exp=Math.max(0,exp-DECAY_PER_MISSED);
+    }
+    cursor.setDate(cursor.getDate()+1);
+  }
+  return exp;
+}
+
+function computeStats(){
+  const totalExp=entries.reduce((s,e)=>s+skills.reduce((ss,sk)=>ss+(e[sk.key]||0),0)*(e.demon||1),0);
+  const totalLingshi=entries.reduce((s,e)=>s+(e.lingshi||0),0);
+  const totalSpend=entries.reduce((s,e)=>s+(e.spend||0),0);
+  const skillExp={};
+  skills.forEach(sk=>{skillExp[sk.key]=computeSkillEffectiveExp(sk.key);});
+  // raw exp (no decay) for comparison
+  const skillRawExp={};
+  skills.forEach(sk=>{skillRawExp[sk.key]=entries.reduce((s,e)=>s+(e[sk.key]||0)*(e.demon||1),0);});
+  const lv=getLevelFromExp(totalExp);
+  return{totalExp,totalLingshi,totalSpend,balance:totalLingshi-totalSpend,level:lv,realm:getRealmInfo(lv),skillExp,skillRawExp};
+}
+
+// Compute missed days & decay for each skill (for today's alert)
+function computeDecayInfo(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const todayStr=today.toISOString().split('T')[0];
+  const todayEntry=entries.find(e=>e.date===todayStr);
+  const result=[];
+  skills.forEach(sk=>{
+    // count consecutive missed days back from today
+    let missed=0,cursor=new Date(today);
+    while(true){
+      const ds=cursor.toISOString().split('T')[0];
+      const rec=entries.find(e=>e.date===ds);
+      if(rec&&(rec[sk.key]||0)>0) break;
+      if(!rec||(rec[sk.key]||0)===0){
+        // check if this date is before our first entry
+        const sortedDates=[...entries].map(e=>e.date).sort();
+        if(sortedDates.length&&ds<sortedDates[0]) break;
+        missed++;
+      }
+      cursor.setDate(cursor.getDate()-1);
+      if(missed>90) break;
+    }
+    if(missed>0){
+      result.push({key:sk.key,name:sk.name,emoji:sk.emoji,missed,decay:missed*DECAY_PER_MISSED});
+    }
+  });
+  return result;
+}
+
+// ══ PANEL ══
+function renderPanel(){
+  const s=computeStats();
+  document.getElementById('stat-grid').innerHTML=`
+    <div class="stat-card"><div class="label">靈石儲量</div><div class="value">◈ ${Math.round(s.balance)}</div><div class="unit">靈石</div></div>
+    <div class="stat-card"><div class="label">總道行</div><div class="value">${s.level}</div><div class="unit">等級</div></div>
+    <div class="stat-card"><div class="label">累積修為</div><div class="value">${Math.round(s.totalExp)}</div><div class="unit">功德點</div></div>
+    <div class="stat-card"><div class="label">修練日數</div><div class="value">${entries.length}</div><div class="unit">天</div></div>
+    <div class="stat-card"><div class="label">出工天數</div><div class="value">${entries.filter(e=>e.work>0).length}</div><div class="unit">天</div></div>`;
+
+  const r=s.realm,pct=Math.max(0,Math.min(1,(s.totalExp-r.curExp)/Math.max(1,r.nextExp-r.curExp)));
+  const icons=['🌱','🔥','💎','⚡','🌀','✨','🌌','🌙','⚔️','👑'];
+  document.getElementById('realm-banner').innerHTML=`
+    <div class="realm-icon">${icons[Math.max(0,TIERS.indexOf(r.tierName))]}</div>
+    <div class="realm-info"><div class="realm-name">${r.tierName}</div><div class="realm-level">第 ${r.layerInTier} 層</div></div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>修為進度</span><span>${Math.round(pct*100)}%</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct*100}%"></div></div>
+    </div>`;
+
+  // Decay alert
+  const decayInfo=computeDecayInfo();
+  const alert=document.getElementById('decay-alert');
+  const decayList=document.getElementById('decay-list');
+  if(decayInfo.length){
+    alert.classList.add('show');
+    decayList.innerHTML=decayInfo.map(d=>`
+      <div class="decay-row">
+        <div class="decay-dot"></div>
+        <span>${d.emoji} ${d.name}：已 <strong>${d.missed}</strong> 天未修練，功法修為 <strong>−${d.decay}</strong> 分鐘等效</span>
+      </div>`).join('');
+  } else {
+    alert.classList.remove('show');
+    decayList.innerHTML='';
+  }
+
+  // Skill cards
+  document.getElementById('skills-grid').innerHTML=skills.map(sk=>{
+    const exp=s.skillExp[sk.key];
+    const rawExp=s.skillRawExp[sk.key];
+    const lv=getLevelFromExp(exp);
+    const ri=getRealmInfo(lv);
+    const p=Math.max(0,Math.min(1,(exp-ri.curExp)/Math.max(1,ri.nextExp-ri.curExp)));
+    const isDecaying=decayInfo.find(d=>d.key===sk.key);
+    const decayBadge=isDecaying?`<span class="decay-badge">退步中 ↓${isDecaying.missed}天</span>`:'';
+    return `<div class="skill-card${isDecaying?' decaying':''}">
+      ${decayBadge}
+      <div class="skill-header"><span class="skill-name">${sk.emoji} ${sk.name}</span><span class="skill-realm">${ri.tierName} ${ri.layerInTier}層</span></div>
+      <div class="skill-min">有效 ${Math.round(exp)} / 累積 ${Math.round(rawExp)} 分鐘</div>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="width:${p*100}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ══ SVG ANIMATIONS ══
+const ANIM_DEFS = {
+  meditation: (running)=>`
+    <svg viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+      <!-- glow rings -->
+      <circle cx="80" cy="80" r="72" fill="none" stroke="rgba(74,155,106,0.15)" stroke-width="1"/>
+      <circle cx="80" cy="80" r="58" fill="none" stroke="rgba(74,155,106,0.2)" stroke-width="1"
+        style="animation:glow-ring ${running?'2s':'0s'} ease-in-out infinite;transform-origin:80px 80px"/>
+      <!-- floating orb -->
+      <circle cx="80" cy="38" r="8" fill="rgba(200,144,42,0.8)"
+        style="animation:float-orb ${running?'2.5s':'0s'} ease-in-out infinite"/>
+      <!-- particles -->
+      ${running?[...Array(4)].map((_,i)=>`<circle cx="${62+i*12}" cy="62" r="2" fill="rgba(126,255,184,0.7)" style="animation:particle-rise 2s ${i*0.5}s ease-out infinite"/>`).join(''):''}
+      <!-- sitting figure -->
+      <!-- body -->
+      <ellipse cx="80" cy="95" rx="18" ry="22" fill="rgba(200,144,42,0.3)" stroke="rgba(200,144,42,0.6)" stroke-width="1.5"
+        style="animation:breathe ${running?'4s':'0s'} ease-in-out infinite;transform-origin:80px 95px"/>
+      <!-- head -->
+      <circle cx="80" cy="67" r="10" fill="rgba(200,144,42,0.5)" stroke="rgba(240,192,96,0.8)" stroke-width="1.5"/>
+      <!-- legs crossed -->
+      <path d="M62,110 Q70,118 80,114 Q90,118 98,110" fill="rgba(200,144,42,0.3)" stroke="rgba(200,144,42,0.5)" stroke-width="1.5" fill-rule="evenodd"/>
+      <!-- arms -->
+      <path d="M65,88 Q60,98 65,108" fill="none" stroke="rgba(200,144,42,0.5)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M95,88 Q100,98 95,108" fill="none" stroke="rgba(200,144,42,0.5)" stroke-width="2" stroke-linecap="round"/>
+      <!-- hands -->
+      <circle cx="65" cy="110" r="4" fill="rgba(200,144,42,0.4)"/>
+      <circle cx="95" cy="110" r="4" fill="rgba(200,144,42,0.4)"/>
+      <!-- aura -->
+      <circle cx="80" cy="80" r="40" fill="none" stroke="rgba(74,155,106,0.3)" stroke-width="2" stroke-dasharray="4 6"
+        style="animation:spin-slow ${running?'8s':'0s'} linear infinite;transform-origin:80px 80px"/>
+    </svg>`,
+
+  exercise: (running)=>`
+    <svg viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+      <!-- ground -->
+      <line x1="20" y1="130" x2="140" y2="130" stroke="rgba(200,144,42,0.3)" stroke-width="1.5"/>
+      <!-- sweat drops -->
+      ${running?`<circle cx="50" cy="55" r="3" fill="rgba(90,200,140,0.6)" style="animation:particle-rise 1.2s 0.1s ease-out infinite"/>
+        <circle cx="42" cy="48" r="2" fill="rgba(90,200,140,0.5)" style="animation:particle-rise 1.4s 0.4s ease-out infinite"/>`:''}
+      <!-- figure running -->
+      <!-- head -->
+      <circle cx="80" cy="55" r="11" fill="rgba(200,144,42,0.5)" stroke="rgba(240,192,96,0.8)" stroke-width="1.5"
+        style="animation:bob ${running?'0.5s':'0s'} ease-in-out infinite;transform-origin:80px 55px"/>
+      <!-- body -->
+      <line x1="80" y1="66" x2="80" y2="100" stroke="rgba(200,144,42,0.7)" stroke-width="3" stroke-linecap="round"/>
+      <!-- arm L swings -->
+      <line x1="80" y1="75" x2="60" y2="90" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"
+        style="animation:arm-swing ${running?'0.5s':'0s'} ease-in-out infinite alternate;transform-origin:80px 75px"/>
+      <!-- arm R -->
+      <line x1="80" y1="75" x2="100" y2="90" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"
+        style="animation:arm-swing ${running?'0.5s':'0s'} ease-in-out infinite alternate-reverse;transform-origin:80px 75px"/>
+      <!-- leg L -->
+      <line x1="80" y1="100" x2="65" y2="122" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"
+        style="animation:arm-swing ${running?'0.5s':'0s'} ease-in-out infinite alternate;transform-origin:80px 100px"/>
+      <!-- leg R -->
+      <line x1="80" y1="100" x2="95" y2="122" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"
+        style="animation:arm-swing ${running?'0.5s':'0s'} ease-in-out infinite alternate-reverse;transform-origin:80px 100px"/>
+      <!-- energy lines -->
+      ${running?`<line x1="30" y1="90" x2="50" y2="90" stroke="rgba(200,144,42,0.4)" stroke-width="2" stroke-dasharray="3 4" style="animation:wave 0.8s ease-in-out infinite"/>
+        <line x1="25" y1="100" x2="48" y2="100" stroke="rgba(200,144,42,0.3)" stroke-width="1.5" stroke-dasharray="3 5" style="animation:wave 1s 0.2s ease-in-out infinite"/>`:''}
+    </svg>`,
+
+  study: (running)=>`
+    <svg viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+      <!-- desk -->
+      <rect x="30" y="108" width="100" height="6" rx="2" fill="rgba(200,144,42,0.35)" stroke="rgba(200,144,42,0.5)" stroke-width="1"/>
+      <line x1="40" y1="114" x2="40" y2="134" stroke="rgba(200,144,42,0.4)" stroke-width="2"/>
+      <line x1="120" y1="114" x2="120" y2="134" stroke="rgba(200,144,42,0.4)" stroke-width="2"/>
+      <!-- book / scroll -->
+      <rect x="50" y="90" width="60" height="18" rx="3" fill="rgba(42,107,74,0.3)" stroke="rgba(74,155,106,0.6)" stroke-width="1.5"/>
+      <line x1="80" y1="91" x2="80" y2="107" stroke="rgba(74,155,106,0.5)" stroke-width="1"/>
+      <!-- lines on book -->
+      <line x1="56" y1="96" x2="77" y2="96" stroke="rgba(200,144,42,0.5)" stroke-width="1"/>
+      <line x1="56" y1="100" x2="77" y2="100" stroke="rgba(200,144,42,0.4)" stroke-width="1"/>
+      <line x1="56" y1="104" x2="68" y2="104" stroke="rgba(200,144,42,0.3)" stroke-width="1"/>
+      <line x1="84" y1="96" x2="103" y2="96" stroke="rgba(200,144,42,0.5)" stroke-width="1"/>
+      <line x1="84" y1="100" x2="103" y2="100" stroke="rgba(200,144,42,0.4)" stroke-width="1"/>
+      <!-- figure sitting -->
+      <circle cx="80" cy="62" r="12" fill="rgba(200,144,42,0.5)" stroke="rgba(240,192,96,0.8)" stroke-width="1.5"/>
+      <!-- body -->
+      <path d="M80,74 Q72,88 72,98 Q80,100 88,98 Q88,88 80,74" fill="rgba(200,144,42,0.3)" stroke="rgba(200,144,42,0.5)" stroke-width="1.5"/>
+      <!-- arm writing -->
+      <line x1="88" y1="88" x2="100" y2="100" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"
+        style="animation:pen-write ${running?'0.8s':'0s'} ease-in-out infinite alternate;transform-origin:88px 88px"/>
+      <!-- other arm holds book -->
+      <line x1="72" y1="88" x2="60" y2="98" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- thought bubble -->
+      ${running?`<circle cx="100" cy="40" r="14" fill="rgba(42,107,74,0.2)" stroke="rgba(74,155,106,0.4)" stroke-width="1" style="animation:breathe 2s ease-in-out infinite;transform-origin:100px 40px"/>
+        <text x="100" y="45" text-anchor="middle" font-size="14" fill="rgba(200,144,42,0.8)">💡</text>
+        <circle cx="90" cy="55" r="3" fill="rgba(74,155,106,0.3)" stroke="rgba(74,155,106,0.4)" stroke-width="1"/>
+        <circle cx="96" cy="50" r="2" fill="rgba(74,155,106,0.3)" stroke="rgba(74,155,106,0.4)" stroke-width="1"/>`:''}
+    </svg>`,
+
+  sword: (running)=>`
+    <svg viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+      <!-- energy aura -->
+      <circle cx="80" cy="85" r="55" fill="none" stroke="rgba(200,144,42,0.1)" stroke-width="20"
+        style="animation:breathe ${running?'1.5s':'0s'} ease-in-out infinite;transform-origin:80px 85px"/>
+      <!-- slash trail -->
+      ${running?`<path d="M30,30 Q80,80 130,130" fill="none" stroke="rgba(200,144,42,0.15)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M35,25 Q80,75 125,125" fill="none" stroke="rgba(240,192,96,0.1)" stroke-width="4" stroke-linecap="round"/>`:''}
+      <!-- figure -->
+      <circle cx="80" cy="50" r="12" fill="rgba(200,144,42,0.5)" stroke="rgba(240,192,96,0.8)" stroke-width="1.5"/>
+      <line x1="80" y1="62" x2="80" y2="100" stroke="rgba(200,144,42,0.7)" stroke-width="3" stroke-linecap="round"/>
+      <!-- legs wide stance -->
+      <line x1="80" y1="100" x2="60" y2="128" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="80" y1="100" x2="100" y2="128" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- arms + sword group -->
+      <g style="animation:sword-slash ${running?'1s':'0s'} ease-in-out infinite;transform-origin:80px 75px">
+        <line x1="80" y1="75" x2="110" y2="55" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- sword -->
+        <line x1="110" y1="55" x2="140" y2="18" stroke="rgba(240,192,96,0.9)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="106" y1="62" x2="118" y2="50" stroke="rgba(200,144,42,0.8)" stroke-width="4" stroke-linecap="round"/>
+        <!-- blade glint -->
+        ${running?`<circle cx="138" cy="20" r="3" fill="rgba(255,255,200,0.9)" style="animation:float-orb 1s ease-in-out infinite"/>`:''}
+      </g>
+      <!-- other arm -->
+      <line x1="80" y1="75" x2="55" y2="80" stroke="rgba(200,144,42,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`,
+
+  work: (running)=>`
+    <svg viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+      <!-- monitor -->
+      <rect x="38" y="50" width="84" height="58" rx="4" fill="rgba(0,0,0,0.5)" stroke="rgba(200,144,42,0.5)" stroke-width="2"/>
+      <rect x="42" y="54" width="76" height="50" rx="2" fill="rgba(42,107,74,0.15)"/>
+      <!-- screen content -->
+      ${running?`<line x1="48" y1="62" x2="78" y2="62" stroke="rgba(200,144,42,0.7)" stroke-width="1.5" style="animation:wave 1s ease-in-out infinite"/>
+        <line x1="48" y1="68" x2="88" y2="68" stroke="rgba(200,144,42,0.5)" stroke-width="1.5" style="animation:wave 1.2s 0.2s ease-in-out infinite"/>
+        <line x1="48" y1="74" x2="70" y2="74" stroke="rgba(200,144,42,0.4)" stroke-width="1.5"/>
+        <rect x="85" y="60" width="28" height="22" rx="2" fill="rgba(74,155,106,0.2)" stroke="rgba(74,155,106,0.4)" stroke-width="1" style="animation:breathe 2s ease-in-out infinite;transform-origin:99px 71px"/>
+        <text x="99" y="75" text-anchor="middle" font-size="12" fill="rgba(200,144,42,0.7)">⚡</text>`:
+        `<line x1="48" y1="62" x2="108" y2="62" stroke="rgba(200,144,42,0.3)" stroke-width="1.5"/>
+        <line x1="48" y1="70" x2="100" y2="70" stroke="rgba(200,144,42,0.2)" stroke-width="1.5"/>`}
+      <!-- stand -->
+      <line x1="80" y1="108" x2="80" y2="118" stroke="rgba(200,144,42,0.4)" stroke-width="2"/>
+      <line x1="60" y1="118" x2="100" y2="118" stroke="rgba(200,144,42,0.4)" stroke-width="2"/>
+      <!-- keyboard -->
+      <rect x="52" y="120" width="56" height="10" rx="2" fill="rgba(200,144,42,0.15)" stroke="rgba(200,144,42,0.3)" stroke-width="1"/>
+      <!-- figure typing -->
+      <circle cx="80" cy="33" r="10" fill="rgba(200,144,42,0.5)" stroke="rgba(240,192,96,0.8)" stroke-width="1.5"/>
+      <path d="M80,43 Q72,50 68,56 Q76,58 80,56 Q84,58 92,56 Q88,50 80,43" fill="rgba(200,144,42,0.3)" stroke="rgba(200,144,42,0.5)" stroke-width="1.5"/>
+      <!-- typing arms -->
+      <line x1="68" y1="53" x2="60" y2="62" stroke="rgba(200,144,42,0.6)" stroke-width="2" stroke-linecap="round"
+        style="animation:arm-swing ${running?'0.4s':'0s'} ease-in-out infinite alternate;transform-origin:68px 53px"/>
+      <line x1="92" y1="53" x2="100" y2="62" stroke="rgba(200,144,42,0.6)" stroke-width="2" stroke-linecap="round"
+        style="animation:arm-swing ${running?'0.4s':'0s'} ease-in-out infinite alternate-reverse;transform-origin:92px 53px"/>
+    </svg>`,
+
+  default: (running)=>`
+    <svg viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(200,144,42,0.2)" stroke-width="1"
+        style="animation:spin-slow ${running?'6s':'0s'} linear infinite;transform-origin:80px 80px"/>
+      <circle cx="80" cy="80" r="45" fill="none" stroke="rgba(74,155,106,0.2)" stroke-width="1"
+        style="animation:spin-ccw ${running?'4s':'0s'} linear infinite;transform-origin:80px 80px"/>
+      <circle cx="80" cy="55" r="8" fill="rgba(200,144,42,0.8)"
+        style="animation:float-orb ${running?'2s':'0s'} ease-in-out infinite"/>
+      <circle cx="80" cy="80" r="12" fill="rgba(200,144,42,0.3)" stroke="rgba(240,192,96,0.6)" stroke-width="2"
+        style="animation:breathe ${running?'2s':'0s'} ease-in-out infinite;transform-origin:80px 80px"/>
+      <text x="80" y="85" text-anchor="middle" font-size="12" fill="rgba(240,192,96,0.8)">修</text>
+    </svg>`
+};
+
+function renderAnim(animType, running){
+  const fn=ANIM_DEFS[animType]||ANIM_DEFS['default'];
+  return fn(running);
+}
+
+function updateAnimPanel(){
+  const panel=document.getElementById('anim-panel');
+  const sk=skills.find(s=>s.key===timerSkillKey);
+  if(!sk){
+    panel.innerHTML='<div class="anim-placeholder">選擇功法後<br>顯示修練動畫</div>';
+    return;
+  }
+  const isRunning=!!timerInterval;
+  panel.innerHTML=`
+    <div class="skill-anim-wrap">${renderAnim(sk.anim||'default',isRunning)}</div>
+    <div class="anim-title">${sk.emoji} ${sk.name}</div>
+    <div class="anim-timer-label">${isRunning?'修練中…':'待命中'}</div>`;
+}
+
+// ══ TIMER ══
+let timerInterval=null,timerStartTs=null,timerElapsed=0,timerSkillKey=null,timerPending=null;
+
+function renderTimerSkillSelect(){
+  document.getElementById('timer-skill-select').innerHTML=skills.map(sk=>
+    `<button class="timer-skill-btn${timerSkillKey===sk.key?' selected':''}" onclick="selectTimerSkill('${sk.key}')">${sk.emoji} ${sk.name}</button>`
+  ).join('');
+}
+
+function selectTimerSkill(key){
+  if(timerInterval){showToast('修練中，請先停止再切換');return;}
+  timerSkillKey=key;
+  renderTimerSkillSelect();
+  const sk=skills.find(s=>s.key===key);
+  document.getElementById('timer-skill-label').textContent=sk?`${sk.emoji} ${sk.name}`:'請先選擇功法';
+  updateAnimPanel();
+}
+
+function timerStart(){
+  if(!timerSkillKey){showToast('請先選擇功法');return;}
+  if(timerInterval)return;
+  timerStartTs=Date.now()-timerElapsed*1000;
+  timerInterval=setInterval(()=>{
+    timerElapsed=Math.floor((Date.now()-timerStartTs)/1000);
+    const h=String(Math.floor(timerElapsed/3600)).padStart(2,'0');
+    const m=String(Math.floor((timerElapsed%3600)/60)).padStart(2,'0');
+    const sc=String(timerElapsed%60).padStart(2,'0');
+    document.getElementById('timer-clock').textContent=`${h}:${m}:${sc}`;
+  },1000);
+  document.getElementById('timer-clock').classList.add('running');
+  document.getElementById('btn-start').style.display='none';
+  document.getElementById('btn-stop').style.display='';
+  document.getElementById('btn-save-timer').style.display='none';
+  document.getElementById('timer-result').textContent='';
+  updateAnimPanel();
+}
+
+function timerStop(){
+  if(!timerInterval)return;
+  clearInterval(timerInterval);timerInterval=null;
+  document.getElementById('timer-clock').classList.remove('running');
+  document.getElementById('btn-start').style.display='';
+  document.getElementById('btn-stop').style.display='none';
+  const totalMins=Math.round(timerElapsed/60);
+  if(totalMins<1){
+    document.getElementById('timer-result').textContent='修練時間不足一分鐘，未計入';
+    timerElapsed=0;document.getElementById('timer-clock').textContent='00:00:00';
+    updateAnimPanel();return;
+  }
+  const sk=skills.find(s=>s.key===timerSkillKey);
+  timerPending={key:timerSkillKey,minutes:totalMins};
+  document.getElementById('timer-result').textContent=`本次：${sk.emoji} ${sk.name} · ${totalMins} 分鐘　→ 確認後點擊「記錄入冊」`;
+  document.getElementById('btn-save-timer').style.display='';
+  updateAnimPanel();
+}
+
+function timerSave(){
+  if(!timerPending)return;
+  // Use current actual date
+  const today=new Date();
+  const todayStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const idx=entries.findIndex(e=>e.date===todayStr);
+  if(idx>=0){
+    entries[idx][timerPending.key]=(entries[idx][timerPending.key]||0)+timerPending.minutes;
+  } else {
+    const ne={date:todayStr,work:0,lingshi:0,spend:0,demon:1,note:''};
+    skills.forEach(sk=>{ne[sk.key]=0;});ne[timerPending.key]=timerPending.minutes;entries.push(ne);
+  }
+  saveEntries(entries);
+  const sk=skills.find(s=>s.key===timerPending.key);
+  showToast(`✓ 已記入 ${todayStr}：${sk.emoji} ${sk.name} ${timerPending.minutes} 分鐘`);
+  renderPanel();renderTimerTodayLog();
+  timerPending=null;
+  document.getElementById('btn-save-timer').style.display='none';
+  document.getElementById('timer-result').textContent=`✓ 已記錄入冊（${todayStr}）`;
+  timerElapsed=0;document.getElementById('timer-clock').textContent='00:00:00';
+  updateAnimPanel();
+}
+
+function renderTimerTodayLog(){
+  const today=new Date();
+  const todayStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const e=entries.find(en=>en.date===todayStr);
+  const el=document.getElementById('timer-today-log');
+  if(!e||(!e.work&&skills.every(sk=>!e[sk.key]))){
+    el.innerHTML='<div class="empty-state" style="padding:1.2rem">今日（'+todayStr+'）尚無修練記錄</div>';return;
+  }
+  el.innerHTML=`<div style="display:flex;gap:12px;flex-wrap:wrap;padding:0.5rem 0">
+    ${e.work>0?`<span style="font-size:0.82rem;color:rgba(200,144,42,0.8)">⚒ 工作 <b style="color:var(--gold-light)">${e.work}h</b></span>`:''}
+    ${skills.filter(sk=>e[sk.key]>0).map(sk=>`<span style="font-size:0.82rem;color:rgba(200,144,42,0.8)">${sk.emoji} <b style="color:var(--gold-light)">${e[sk.key]}分</b></span>`).join('')}
+  </div>`;
+}
+
+// ══ ADD FORM ══
+function buildAddForm(dateStr){
+  const d=dateStr||new Date().toISOString().split('T')[0];
+  document.getElementById('add-form-grid').innerHTML=`
+    <div class="form-group"><label>日期</label><input type="date" id="f-date-val" value="${d}" onchange="loadDateIntoForm(this.value)"></div>
+    <div class="form-group"><label>⚒ 工作（小時）</label><input type="number" id="f-work" placeholder="0" min="0" max="24" step="0.5"></div>
+    ${skills.map(sk=>`<div class="form-group"><label>${sk.emoji} ${sk.name}（分鐘）</label><input type="number" id="f-${sk.key}" placeholder="0" min="0"></div>`).join('')}
+    <div class="form-group"><label>靈石收入</label><input type="number" id="f-lingshi" placeholder="0" min="0"></div>
+    <div class="form-group"><label>靈石消費</label><input type="number" id="f-spend" placeholder="0" min="0"></div>
+    <div class="form-group"><label>心魔係數</label><select id="f-demon"><option value="1">1.0（正常）</option><option value="0.5">0.5（心魔干擾）</option></select></div>`;
+}
+
+function loadTodayIntoForm(){
+  const today=new Date().toISOString().split('T')[0];
+  loadDateIntoForm(today);
+}
+
+function loadDateIntoForm(dateStr){
+  const rec=entries.find(e=>e.date===dateStr);
+  if(!rec){buildAddForm(dateStr);return;}
+  buildAddForm(dateStr);
+  document.getElementById('f-work').value=rec.work||'';
+  skills.forEach(sk=>{const el=document.getElementById('f-'+sk.key);if(el)el.value=rec[sk.key]||'';});
+  document.getElementById('f-lingshi').value=rec.lingshi||'';
+  document.getElementById('f-spend').value=rec.spend||'';
+  document.getElementById('f-demon').value=rec.demon||1;
+  document.getElementById('f-note').value=rec.note||'';
+  showToast(`已載入 ${dateStr} 記錄，可直接修改後儲存`);
+}
+
+function addEntry(){
+  const date=document.getElementById('f-date-val').value;
+  if(!date){showToast('請輸入日期！');return;}
+  const entry={date,work:parseFloat(document.getElementById('f-work').value)||0,lingshi:parseFloat(document.getElementById('f-lingshi').value)||0,spend:parseFloat(document.getElementById('f-spend').value)||0,note:document.getElementById('f-note').value||'',demon:parseFloat(document.getElementById('f-demon').value)||1};
+  skills.forEach(sk=>{entry[sk.key]=parseFloat(document.getElementById('f-'+sk.key).value)||0;});
+  const idx=entries.findIndex(e=>e.date===date);
+  if(idx>=0)entries[idx]=entry;else entries.push(entry);
+  saveEntries(entries);
+  const st=document.getElementById('save-status');st.classList.add('show');setTimeout(()=>st.classList.remove('show'),2000);
+  showToast(`✓ 記錄已儲存（${date}）`);
+  renderRecent();renderPanel();
+}
+
+function renderRecent(){
+  const recent=[...entries].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);
+  const el=document.getElementById('recent-entries');
+  if(!recent.length){el.innerHTML='<div class="empty-state">尚無記錄</div>';return;}
+  el.innerHTML=recent.map(e=>`
+    <div style="padding:0.6rem 0;border-bottom:1px solid rgba(200,144,42,0.1);display:flex;gap:10px;flex-wrap:wrap;font-size:0.78rem;align-items:center">
+      <span style="color:var(--gold-light);font-family:'Noto Serif TC',serif;min-width:90px">${e.date}</span>
+      ${e.work>0?`<span style="color:rgba(200,144,42,0.7)">⚒ ${e.work}h</span>`:''}
+      ${skills.filter(sk=>e[sk.key]>0).map(sk=>`<span style="color:rgba(200,144,42,0.7)">${sk.emoji} ${e[sk.key]}分</span>`).join('')}
+      ${e.lingshi>0?`<span class="badge">+${e.lingshi}</span>`:''}
+      <button onclick="loadDateIntoForm('${e.date}');switchTab('add')" style="margin-left:auto;font-size:0.68rem;background:rgba(200,144,42,0.1);border:1px solid rgba(200,144,42,0.25);color:var(--gold);padding:2px 8px;border-radius:3px;cursor:pointer">編輯</button>
+    </div>`).join('');
+}
+
+// ══ LOG ══
+function renderLog(){
+  const search=document.getElementById('search-date').value.trim();
+  const sort=document.getElementById('filter-sort').value;
+  let filtered=entries.filter(e=>!search||e.date.includes(search));
+  filtered=[...filtered].sort((a,b)=>sort==='desc'?b.date.localeCompare(a.date):a.date.localeCompare(b.date));
+  document.getElementById('log-count').textContent=`共 ${filtered.length} 筆`;
+  document.getElementById('log-thead').innerHTML=`<tr><th>日期</th><th>工作</th>${skills.map(sk=>`<th>${sk.emoji} ${sk.name}</th>`).join('')}<th>靈石</th><th>消費</th><th>心魔</th><th>備註</th><th></th></tr>`;
+  const tbody=document.getElementById('log-tbody');
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="${6+skills.length}"><div class="empty-state">此間靈氣稀薄，尚無記錄</div></td></tr>`;return;}
+  tbody.innerHTML=filtered.map(e=>`<tr>
+    <td class="date-cell">${e.date}</td>
+    <td>${e.work>0?e.work+'h':'—'}</td>
+    ${skills.map(sk=>`<td>${(e[sk.key]||0)>0?e[sk.key]+'分':'—'}</td>`).join('')}
+    <td>${e.lingshi>0?`<span class="badge">+${e.lingshi}</span>`:'—'}</td>
+    <td>${e.spend>0?`<span class="badge badge-red">-${e.spend}</span>`:'—'}</td>
+    <td class="${e.demon<1?'demon-low':''}">${e.demon}</td>
+    <td style="font-size:0.72rem;color:rgba(200,144,42,0.5)">${e.note||''}</td>
+    <td><button onclick="loadDateIntoForm('${e.date}');switchTab('add')" style="font-size:0.68rem;background:rgba(200,144,42,0.1);border:1px solid rgba(200,144,42,0.25);color:var(--gold);padding:2px 8px;border-radius:3px;cursor:pointer;white-space:nowrap">編輯</button></td>
+  </tr>`).join('');
+}
+
+// ══ CHARTS ══
+let chartMain=null,chartSkills=null;
+function renderCharts(){
+  const sorted=[...entries].sort((a,b)=>a.date.localeCompare(b.date)).slice(-30);
+  const labels=sorted.map(e=>e.date.slice(5));
+  const ctx1=document.getElementById('chart-main').getContext('2d');
+  if(chartMain)chartMain.destroy();
+  chartMain=new Chart(ctx1,{type:'bar',data:{labels,datasets:[
+    {label:'靈石',data:sorted.map(e=>e.lingshi||0),backgroundColor:'rgba(200,144,42,0.5)',borderColor:'rgba(200,144,42,0.8)',borderWidth:1,yAxisID:'y1'},
+    {label:'修為',data:sorted.map(e=>skills.reduce((s,sk)=>s+(e[sk.key]||0),0)*(e.demon||1)),type:'line',borderColor:'rgba(90,200,140,0.8)',backgroundColor:'rgba(90,200,140,0.1)',tension:0.3,fill:true,yAxisID:'y2'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
+    x:{ticks:{color:'rgba(200,144,42,0.6)',font:{size:10}},grid:{color:'rgba(200,144,42,0.05)'}},
+    y1:{position:'left',ticks:{color:'rgba(200,144,42,0.6)',font:{size:10}},grid:{color:'rgba(200,144,42,0.08)'}},
+    y2:{position:'right',ticks:{color:'rgba(90,200,140,0.6)',font:{size:10}},grid:{display:false}}
+  }}});
+  document.getElementById('chart-legend').innerHTML=`
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(200,144,42,0.7)"></div>靈石</div>
+    <div class="legend-item"><div class="legend-dot" style="background:rgba(90,200,140,0.7)"></div>修為</div>`;
+  const colors=['rgba(200,144,42,0.6)','rgba(90,160,200,0.6)','rgba(90,200,140,0.6)','rgba(200,90,80,0.6)','rgba(160,110,200,0.6)','rgba(200,180,80,0.6)','rgba(80,180,200,0.6)'];
+  const ctx2=document.getElementById('chart-skills').getContext('2d');
+  if(chartSkills)chartSkills.destroy();
+  chartSkills=new Chart(ctx2,{type:'bar',data:{labels:skills.map(sk=>sk.emoji+' '+sk.name),datasets:[{
+    data:skills.map(sk=>entries.reduce((s,e)=>s+(e[sk.key]||0),0)),
+    backgroundColor:skills.map((_,i)=>colors[i%colors.length]),
+    borderColor:skills.map((_,i)=>colors[i%colors.length].replace('0.6','1')),borderWidth:1}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{
+      x:{ticks:{color:'rgba(200,144,42,0.6)',font:{size:10}},grid:{color:'rgba(200,144,42,0.08)'}},
+      y:{ticks:{color:'rgba(200,144,42,0.8)',font:{size:11}},grid:{display:false}}
+    }}});
+}
+
+// ══ MANAGE ══
+function renderManage(){
+  const list=document.getElementById('manage-skill-list');
+  if(!skills.length){list.innerHTML='<div class="empty-state">尚無功法，請新增</div>';return;}
+  const animLabels={meditation:'打坐冥想',exercise:'體魄鍛鍊',study:'研讀學習',sword:'劍術修煉',work:'勞作工作',default:'通用'};
+  list.innerHTML=skills.map((sk,i)=>`<div class="manage-row">
+    <span class="mk-emoji">${sk.emoji}</span>
+    <span class="mk-name">${sk.name}</span>
+    <span class="mk-key">key:${sk.key}</span>
+    <span class="mk-anim">動畫:${animLabels[sk.anim||'default']||sk.anim}</span>
+    <button class="btn-primary btn-sm" onclick="moveSkill(${i},-1)" ${i===0?'disabled':''}>↑</button>
+    <button class="btn-primary btn-sm" onclick="moveSkill(${i},1)"  ${i===skills.length-1?'disabled':''}>↓</button>
+    <button class="btn-danger" onclick="deleteSkill('${sk.key}')">刪除</button>
+  </div>`).join('');
+}
+
+function moveSkill(idx,dir){
+  const to=idx+dir;if(to<0||to>=skills.length)return;
+  [skills[idx],skills[to]]=[skills[to],skills[idx]];
+  saveSkills(skills);renderManage();renderPanel();renderTimerSkillSelect();
+}
+
+function deleteSkill(key){
+  if(!confirm('確定移除此功法？\n（歷史分鐘數資料保留，面板將不再顯示）'))return;
+  skills=skills.filter(sk=>sk.key!==key);saveSkills(skills);
+  if(timerSkillKey===key)timerSkillKey=null;
+  renderManage();renderPanel();renderTimerSkillSelect();buildAddForm();
+  showToast('功法已移除');
+}
+
+function addSkill(){
+  const emoji=document.getElementById('new-emoji').value.trim()||'✨';
+  const name=document.getElementById('new-name').value.trim();
+  const key=document.getElementById('new-key').value.trim().toLowerCase().replace(/[^a-z0-9]/g,'');
+  const anim=document.getElementById('new-anim').value;
+  if(!name){showToast('請輸入功法名稱');return;}
+  if(!key){showToast('請輸入欄位代號（英文）');return;}
+  if(['work','lingshi','spend','demon','note','date'].includes(key)){showToast('此代號為系統保留，請換一個');return;}
+  if(skills.find(sk=>sk.key===key)){showToast('此代號已存在，請換一個');return;}
+  skills.push({emoji,name,key,anim});saveSkills(skills);
+  document.getElementById('new-emoji').value='';
+  document.getElementById('new-name').value='';
+  document.getElementById('new-key').value='';
+  renderManage();renderPanel();renderTimerSkillSelect();buildAddForm();
+  showToast(`${emoji} ${name} 已加入功法列表`);
+}
+
+// ══ UTILS ══
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function switchTab(name){
+  const names=['panel','timer','add','log','chart','manage'];
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='log')renderLog();
+  if(name==='chart')setTimeout(renderCharts,50);
+  if(name==='add'){buildAddForm();renderRecent();}
+  if(name==='manage')renderManage();
+  if(name==='timer'){renderTimerSkillSelect();renderTimerTodayLog();updateAnimPanel();}
+}
+
+// ══ INIT ══
+renderPanel();
+buildAddForm();
+renderTimerSkillSelect();
+updateAnimPanel();
+</script>
+
+</body>
+</html>
